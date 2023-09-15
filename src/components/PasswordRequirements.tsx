@@ -31,8 +31,13 @@ const PasswordRequirements: React.FC<RequirementsProps> = ({
     <RequirementsContainer data-testid="requirement-id">
       {isArray ? (
         requirement.map((req) => (
-          <TextContainer key={req.id} role="status">
+          <TextContainer
+            key={req.id}
+            role="status"
+            data-testid="text-container"
+          >
             <IconContainer
+              data-testid="icon-container"
               color={password.match(req.matchRegex) ? "green" : "red"}
             >
               {password.match(req.matchRegex) ? <CheckCircle /> : <Cancel />}
@@ -41,12 +46,14 @@ const PasswordRequirements: React.FC<RequirementsProps> = ({
               {req.text}
             </Typography>
             {!password.match(req.matchRegex) && (
-              <HiddenMsg aria-live="assertive">{req.error}</HiddenMsg>
+              <HiddenMsg aria-live="assertive" data-testid="hidden-msg">
+                {req.error}
+              </HiddenMsg>
             )}
           </TextContainer>
         ))
       ) : (
-        <TextContainer>
+        <TextContainer data-testid="text-container">
           <div role="status">
             <IconContainer
               color={uniqueReq ? "green" : "red"}

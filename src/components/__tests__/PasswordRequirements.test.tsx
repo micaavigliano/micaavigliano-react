@@ -1,11 +1,15 @@
-import { render, getByRole } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import PasswordRequirements from "../PasswordRequirements";
 import { requirementsArray, testRequirement } from "../../helpers/requirements";
+import exp from "constants";
 
 describe("Form", () => {
-  it("it renders the passwordRequirement component successfully", () => {
+  it("renders the passwordRequirement component successfully", () => {
     const { getByTestId } = render(
-      <PasswordRequirements requirement={testRequirement} password="Mica123!" />
+      <PasswordRequirements
+        requirement={requirementsArray}
+        password="Mica123!"
+      />
     );
 
     const container = getByTestId("requirement-id");
@@ -13,25 +17,58 @@ describe("Form", () => {
     expect(container).toBeInTheDocument();
   });
 
-  it("it renders the icons successfully", () => {
-    const uniqueReq = false;
+  it("renders the multiple requirements successfully", () => {
+    const password = "???????!";
+    const { queryAllByTestId } = render(
+      <PasswordRequirements
+        requirement={requirementsArray}
+        password={password}
+      />
+    );
+
+    const container = queryAllByTestId("text-container");
+
+    container.forEach((element) => {
+      expect(element).toBeInTheDocument();
+    });
+
+    requirementsArray.forEach((regex) => {
+      if (password.match(regex.matchRegex)) {
+        const checkCircleIcon = queryAllByTestId("CancelIcon");
+        checkCircleIcon.forEach((check) => {
+          expect(check).toBeInTheDocument();
+        });
+      } else {
+        const cancelIcon = queryAllByTestId("CheckCircleIcon");
+        cancelIcon.forEach((cancel) => {
+          expect(cancel).toBeInTheDocument();
+        });
+      }
+    });
+  });
+
+  it("renders a single requirement successfully", () => {
     const { getByTestId } = render(
       <PasswordRequirements
         requirement={testRequirement}
         password="Mica1234!"
       />
     );
-
-    const container = getByTestId("icon-container");
-
+    const container = getByTestId("text-container");
     expect(container).toBeInTheDocument();
+  });
 
-    if (uniqueReq) {
-      const checkCircleIcon = getByTestId("CancelIcon");
-      expect(checkCircleIcon).toBeInTheDocument();
-    } else {
-      const cancelIcon = getByTestId("CheckCircleIcon");
-      expect(cancelIcon).toBeInTheDocument();
+  it("renders a hidden message if a requirement is not address. This hidden message is only acknowledge for those assistive techonologies' users", () => {
+    const password = "Mica1234!";
+    const { getByTestId } = render(
+      <PasswordRequirements requirement={testRequirement} password={password} />
+    );
+
+    if (!password.match(testRequirement.matchRegex)) {
+      const message = getByTestId("hidden-msg");
+      expect(message).toBeInTheDocument();
+      expect(message).toHaveAttribute("aria-assertive");
+      expect(message).toHaveTextContent(testRequirement.error);
     }
   });
 });
