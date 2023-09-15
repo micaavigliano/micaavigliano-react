@@ -18,6 +18,7 @@ describe("Form", () => {
   it("it updates the input value successfully on input change", () => {
     const { getByLabelText } = render(<PasswordComponent />);
     const inputElement = getByLabelText("type your password");
+
     fireEvent.change(inputElement, { target: { value: "newPassword123$" } });
   });
 
