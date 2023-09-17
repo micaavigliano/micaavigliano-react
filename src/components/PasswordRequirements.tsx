@@ -63,7 +63,9 @@ const PasswordRequirements: React.FC<RequirementsProps> = ({
             </IconContainer>
             <>
               {!uniqueReq && (
-                <HiddenMsg aria-live="assertive">{requirement.error}</HiddenMsg>
+                <HiddenMsg aria-live="assertive" data-testid="hidden-msg">
+                  {requirement.error}
+                </HiddenMsg>
               )}
             </>
             <Typography color={uniqueReq ? "green" : "black"}>

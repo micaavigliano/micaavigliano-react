@@ -59,7 +59,7 @@ describe("Form", () => {
   });
 
   it("renders a hidden message if a requirement is not address. This hidden message is only acknowledge for those assistive techonologies' users", () => {
-    const password = "Mica1234!";
+    const password = "Mica!";
     const { getByTestId } = render(
       <PasswordRequirements requirement={testRequirement} password={password} />
     );
@@ -67,7 +67,7 @@ describe("Form", () => {
     if (!password.match(testRequirement.matchRegex)) {
       const message = getByTestId("hidden-msg");
       expect(message).toBeInTheDocument();
-      expect(message).toHaveAttribute("aria-assertive");
+      expect(message).toHaveAttribute("aria-live");
       expect(message).toHaveTextContent(testRequirement.error);
     }
   });
