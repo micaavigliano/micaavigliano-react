@@ -30,7 +30,7 @@ const PasswordRequirements: React.FC<RequirementsProps> = ({
   return (
     <RequirementsContainer data-testid="requirement-id">
       {isArray ? (
-        requirement.map((req) => (
+        requirement.map((req: Requirement) => (
           <TextContainer
             key={req.id}
             role="status"
